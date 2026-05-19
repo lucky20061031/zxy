@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>蜜糖聊天室 · 私人部署版</title>
+    <!-- 自定义图标（红色苹果），不依赖manifest -->
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKPSURBVHhe7Z1BjtowEIZf/IToYgYJNQvK3TpLpF6gF5hNpVmk3qAXwC1ST9CL9AazmUrmAuwm0iwQZQJJhVLpA6RRgI4dYqff+z4nGvkCkRC+vO/X72cD9CdKmUwmE/yXZRl0XZd133VdCCEYjUYwHA5B13VhPp/DeDwGpRSsViuQUoJSCp6enuD19RUGgwGs12tYLpdQVRW8v78HGaVU+62UQtd1oZQKpZTgPUAIEUIpFcA/EiIrpYJSKoA/IJRSIYQApRREKZVEKdVIKYWUUhOlVCOl1EQp1UgpNZFSCZRSCZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRST8r/QXcRiBlKxeF1AAAAAElFTkSuQmCC">
+    <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKPSURBVHhe7Z1BjtowEIZf/IToYgYJNQvK3TpLpF6gF5hNpVmk3qAXwC1ST9CL9AazmUrmAuwm0iwQZQJJhVLpA6RRgI4dYqff+z4nGvkCkRC+vO/X72cD9CdKmUwmE/yXZRl0XZd133VdCCEYjUYwHA5B13VhPp/DeDwGpRSsViuQUoJSCp6enuD19RUGgwGs12tYLpdQVRW8v78HGaVU+62UQtd1oZQKpZTgPUAIEUIpFcA/EiIrpYJSKoA/IJRSIYQApRREKZVEKdVIKYWUUhOlVCOl1EQp1UgpNZFSCZRSCZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRSI0qpkZRST8r/QXcRiBlKxeF1AAAAAElFTkSuQmCC">
+    <style>
+        /* 完整样式（与之前稳定版相同，保证所有功能） */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 0; }
+        .phone { width: 100%; max-width: 400px; height: 700px; background: #f5f5f5; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .chat-scroll { flex: 1; overflow-y: auto; padding: 12px; background: #ededed; display: flex; flex-direction: column; gap: 12px; }
+        .message-row { display: flex; align-items: flex-end; gap: 8px; }
+        .message-row.me { justify-content: flex-end; }
+        .bubble { max-width: 75%; border-radius: 20px; padding: 8px 12px; font-size: 16px; line-height: 1.4; white-space: normal; word-break: break-word; overflow-wrap: break-word; display: inline-block; }
+        .bubble.me { background: #95ec69; color: #000; }
+        .bubble.other { background: white; color: #000; box-shadow: 0 1px 0.5px rgba(0,0,0,0.05); }
+        .quote { border-left: 3px solid #b2b2b2; background: #f5f5f5; padding: 4px 8px; margin-bottom: 6px; border-radius: 12px; font-size: 12px; color: #666; }
+        .msg-footer { font-size: 10px; color: #8e8e93; margin-top: 4px; text-align: right; display: flex; justify-content: flex-end; gap: 6px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .call-record { background: #e5e5ea; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #3a3a3c; display: inline-block; margin: 4px auto; text-align: center; }
+        .top-bar { background: #ededed; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid #dbdbdb; }
+        .top-info { display: flex; align-items: center; gap: 8px; }
+        .top-info strong { font-size: 17px; font-weight: 500; }
+        .top-info span { font-size: 12px; color: #8e8e93; margin-left: 6px; }
+        .input-container { background: #f7f7f7; border-top: 0.5px solid #dbdbdb; }
+        .input-main { display: flex; align-items: center; padding: 8px 12px; gap: 8px; }
+        .input-main input { flex: 1; border: none; background: white; border-radius: 20px; padding: 8px 14px; font-size: 16px; outline: none; border: 0.5px solid #e5e5e5; }
+        .input-main button { background: #07c160; color: white; border: none; padding: 6px 16px; border-radius: 20px; font-size: 15px; font-weight: 500; }
+        .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 4px 12px 10px 12px; gap: 10px; background: #f7f7f7; }
+        .emoji-list { display: flex; gap: 6px; overflow-x: auto; max-width: 160px; font-size: 22px; }
+        .media-icons { display: flex; gap: 12px; color: #576b95; font-size: 20px; align-items: center; }
+        .status-control { display: flex; align-items: center; gap: 6px; background: #fff; padding: 4px 10px; border-radius: 20px; border: 0.5px solid #e0e0e0; }
+        .status-control select { border: none; background: transparent; font-size: 13px; padding: 4px; outline: none; }
+        .status-control button { background: #07c160; color: white; border: none; padding: 2px 10px; border-radius: 16px; font-size: 12px; }
+        .pat-btn { background: #e5e5ea; padding: 4px 12px; border-radius: 20px; font-size: 13px; border: none; }
+        .tab-bar { display: flex; background: #f7f7f7; border-top: 0.5px solid #e0e0e0; border-bottom: 0.5px solid #e0e0e0; }
+        .tab { flex: 1; text-align: center; padding: 10px 0; font-size: 14px; cursor: pointer; color: #8e8e93; }
+        .tab.active { color: #07c160; font-weight: 600; border-bottom: 2px solid #07c160; }
+        .card-section { background: white; margin: 12px; padding: 12px; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .card-title { font-weight: 500; margin-bottom: 8px; font-size: 14px; }
+        .btn-primary { background: #07c160; color: white; padding: 4px 12px; border-radius: 16px; font-size: 13px; border: none; cursor: pointer; }
+        .img-upload-label { background: #07c160; color: white; padding: 4px 12px; border-radius: 16px; font-size: 13px; display: inline-block; margin-top: 4px; cursor: pointer; }
+        .preview-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-top: 4px; border: 1px solid #ddd; }
+        .preview-bg { width: 100%; height: 60px; background-size: cover; background-position: center; border-radius: 12px; margin-top: 4px; border: 1px solid #ddd; }
+        .video-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .video-mini { position: fixed; bottom: 20px; right: 20px; width: 180px; height: 140px; background: black; border-radius: 16px; z-index: 1100; border: 2px solid white; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; cursor: pointer; }
+        .media-preview { max-width: 180px; max-height: 140px; border-radius: 12px; }
+        .daily-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .daily-card { background: linear-gradient(145deg, #fff6e8, #ffede0); max-width: 320px; width: 85%; border-radius: 48px; padding: 28px 20px; text-align: center; box-shadow: 0 25px 40px rgba(255, 100, 0, 0.2); animation: fadeIn 0.3s ease; border: 1px solid #ffcc99; }
+        .daily-card h2 { font-size: 28px; margin-bottom: 8px; color: #e86a1f; font-weight: 600; }
+        .daily-card .date { color: #b95f2a; font-size: 14px; margin-bottom: 20px; border-bottom: 1px solid #ffcc99; display: inline-block; padding-bottom: 6px; }
+        .daily-status { background: rgba(255, 255, 255, 0.7); border-radius: 32px; padding: 18px; margin: 16px 0; text-align: left; backdrop-filter: blur(2px); }
+        .daily-status p { margin: 10px 0; font-size: 16px; color: #a34713; }
+        .daily-status .emoji-big { font-size: 28px; margin-right: 10px; }
+        .confirm-btn { background: #ff8c42; border: none; padding: 12px 28px; border-radius: 50px; font-size: 16px; color: white; font-weight: 600; margin-top: 12px; width: 80%; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: 0.2s; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .delete-btn { background: #ff3b30; color: white; border: none; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+    (function(){
+        // 存储键（使用固定前缀，保证数据独立）
+        const STORAGE = {
+            msgs: 'https_chat_msgs',
+            daily: 'https_daily_cards',
+            myStatusCards: 'https_my_status',
+            otherStatusCards: 'https_other_status',
+            letters: 'https_letters',
+            profile: 'https_profile',
+            bg: 'https_bg',
+            callBg: 'https_callbg',
+            speed: 'https_speed',
+            lastAutoLetter: 'https_last_auto_letter',
+            patMe: 'https_pat_me',
+            patOther: 'https_pat_other',
+            lastGreetingDate: 'https_last_greeting',
+            dailyMemories: 'https_daily_memories',
+            morningStatusCards: 'https_morning_status',
+            morningWeatherCards: 'https_morning_weather',
+            morningOtherStatusCards: 'https_morning_other_status',
+            morningQuoteCards: 'https_morning_quote'
+        };
+
+        // 默认数据（功能完整）
+        const defaultDaily = [
+            { id: 'd1', type: 'text', content: '今天天气真好' },
+            { id: 'd2', type: 'text', content: '吃饭了吗？' },
+            { id: 'd3', type: 'text', content: '哈哈哈' },
+            { id: 'd4', type: 'text', content: '在忙 晚点聊' },
+            { id: 'd5', type: 'image', content: 'https://picsum.photos/id/20/300/200' },
+            { id: 'd6', type: 'video', content: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+            { id: 'd7', type: 'text', content: '给你点赞' }
+        ];
+        const defaultMyStatus = [
+            { id: 'ms1', content: '在线' }, { id: 'ms2', content: '忙碌' }, { id: 'ms3', content: '离开' }, { id: 'ms4', content: '飞行中' }
+        ];
+        const defaultOtherStatus = [
+            { id: 'os1', content: '在线' }, { id: 'os2', content: '忙碌' }, { id: 'os3', content: '离线' }, { id: 'os4', content: '勿扰' }
+        ];
+        const defaultMorningStatus = ["想你", "好用", "小笨蛋", "全世界你最可爱", "今天也要开心", "元气满满"];
+        const defaultMorningWeather = ["阳光明媚", "花香四溢", "微风不燥", "星星眨眼", "云朵偷懒", "彩虹糖"];
+        const defaultMorningOtherStatus = ["在线", "忙碌", "离线", "勿扰", "发呆", "充电中"];
+        const defaultMorningQuote = ["你是我最喜欢的人 ❤️", "想和你一起看日出", "今天也超喜欢你", "每一秒都是心动", "你的笑容是宝藏", "遇见你是最美的意外"];
+        const EMOJIS = ['🥰','😎','🧐','🥵','😤','😡','🥺','😭','🥲','😴','👻','✌','🫡','❌','🤗','😮','✅','💗','❤'];
+        const defaultMyAvatar = 'https://randomuser.me/api/portraits/women/68.jpg';
+        const defaultOtherAvatar = 'https://randomuser.me/api/portraits/men/32.jpg';
+        const defaultCallBg = 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500';
+
+        // 全局变量
+        let messages = [], dailyCards = [...defaultDaily], myStatusCards = [...defaultMyStatus], otherStatusCards = [...defaultOtherStatus];
+        let letters = [], speed = { minSec: 3, maxSec: 12, autoMinSec: 90, autoMaxSec: 210 };
+        let profile = { myName: '我', otherName: '对方', myAvatar: defaultMyAvatar, otherAvatar: defaultOtherAvatar };
+        let chatBg = '', callBg = defaultCallBg;
+        let myStatus = '在线', otherStatus = '在线', patTextMe = '拍了拍我', patTextOther = '拍了拍我';
+        let activeTab = 'chat', lastAutoLetterTime = null, myStatusSelect = null, dailyMemories = [];
+        let morningStatusCards = [...defaultMorningStatus];
+        let morningWeatherCards = [...defaultMorningWeather];
+        let morningOtherStatusCards = [...defaultMorningOtherStatus];
+        let morningQuoteCards = [...defaultMorningQuote];
+        
+        let callActive = false, callDirection = null, callTimer = 0, callInterval = null, incomingCall = false, callTimeout = null, miniCall = false;
+        let autoOtherStatusTimer = null, autoActiveTimer = null, pendingTimeouts = [];
+        let appEl, chatScrollDiv, inputText;
+        
+        // 通知相关
+        let notificationPermission = false;
+        let pageVisible = true;
+        document.addEventListener("visibilitychange", () => { pageVisible = !document.hidden; });
+        
+        async function requestNotification() {
+            if (!("Notification" in window)) {
+                alert("您的浏览器不支持通知功能");
+                return false;
+            }
+            if (Notification.permission === "granted") {
+                notificationPermission = true;
+                alert("通知权限已开启");
+                return true;
+            } else if (Notification.permission === "denied") {
+                alert("您已拒绝通知权限，请到浏览器设置中手动允许后刷新页面重试。");
+                return false;
+            } else {
+                const perm = await Notification.requestPermission();
+                if (perm === "granted") {
+                    notificationPermission = true;
+                    alert("通知权限已开启，对方发消息时会提醒您");
+                    return true;
+                } else {
+                    alert("您拒绝了通知，将无法收到提醒");
+                    return false;
+                }
+            }
+        }
+        
+        function sendNotification(title, body) {
+            if (notificationPermission && !pageVisible && Notification.permission === "granted") {
+                new Notification(title, { body: body, icon: "https://cdn-icons-png.flaticon.com/512/733/733585.png" });
+            }
+        }
+        
+        function testNotification() {
+            if (notificationPermission && Notification.permission === "granted") {
+                new Notification("测试通知", { body: "通知功能正常！", icon: "https://cdn-icons-png.flaticon.com/512/733/733585.png" });
+            } else {
+                alert("请先开启通知权限");
+            }
+        }
+
+        function genId() { return Date.now() + '-' + Math.random().toString(36).substr(2, 8); }
+        function rand(min, max) { return Math.floor(Math.random() * (max - min + 1) + min); }
+        function cleanText(str) { if (!str) return ''; return str.replace(/[\n\r]+/g, ' ').trim(); }
+
+        function saveAll() {
+            localStorage.setItem(STORAGE.msgs, JSON.stringify(messages));
+            localStorage.setItem(STORAGE.daily, JSON.stringify(dailyCards));
+            localStorage.setItem(STORAGE.myStatusCards, JSON.stringify(myStatusCards));
+            localStorage.setItem(STORAGE.otherStatusCards, JSON.stringify(otherStatusCards));
+            localStorage.setItem(STORAGE.letters, JSON.stringify(letters));
+            localStorage.setItem(STORAGE.profile, JSON.stringify(profile));
+            localStorage.setItem(STORAGE.bg, chatBg);
+            localStorage.setItem(STORAGE.callBg, callBg);
+            localStorage.setItem(STORAGE.speed, JSON.stringify(speed));
+            if(lastAutoLetterTime) localStorage.setItem(STORAGE.lastAutoLetter, lastAutoLetterTime);
+            localStorage.setItem(STORAGE.patMe, patTextMe);
+            localStorage.setItem(STORAGE.patOther, patTextOther);
+            localStorage.setItem(STORAGE.dailyMemories, JSON.stringify(dailyMemories));
+            localStorage.setItem(STORAGE.morningStatusCards, JSON.stringify(morningStatusCards));
+            localStorage.setItem(STORAGE.morningWeatherCards, JSON.stringify(morningWeatherCards));
+            localStorage.setItem(STORAGE.morningOtherStatusCards, JSON.stringify(morningOtherStatusCards));
+            localStorage.setItem(STORAGE.morningQuoteCards, JSON.stringify(morningQuoteCards));
+        }
+        function load() {
+            try {
+                let m = localStorage.getItem(STORAGE.msgs); if(m) messages = JSON.parse(m);
+                let d = localStorage.getItem(STORAGE.daily); if(d) dailyCards = JSON.parse(d);
+                let msc = localStorage.getItem(STORAGE.myStatusCards); if(msc) myStatusCards = JSON.parse(msc);
+                let osc = localStorage.getItem(STORAGE.otherStatusCards); if(osc) otherStatusCards = JSON.parse(osc);
+                let l = localStorage.getItem(STORAGE.letters); if(l) letters = JSON.parse(l);
+                let p = localStorage.getItem(STORAGE.profile); if(p) profile = JSON.parse(p);
+                let bg = localStorage.getItem(STORAGE.bg); if(bg) chatBg = bg;
+                let cbg = localStorage.getItem(STORAGE.callBg); if(cbg) callBg = cbg;
+                let sp = localStorage.getItem(STORAGE.speed); if(sp) speed = JSON.parse(sp);
+                let lastAuto = localStorage.getItem(STORAGE.lastAutoLetter); if(lastAuto) lastAutoLetterTime = parseInt(lastAuto);
+                let pm = localStorage.getItem(STORAGE.patMe); if(pm) patTextMe = pm;
+                let po = localStorage.getItem(STORAGE.patOther); if(po) patTextOther = po;
+                let memories = localStorage.getItem(STORAGE.dailyMemories); if(memories) dailyMemories = JSON.parse(memories);
+                let ms = localStorage.getItem(STORAGE.morningStatusCards); if(ms) morningStatusCards = JSON.parse(ms);
+                let mw = localStorage.getItem(STORAGE.morningWeatherCards); if(mw) morningWeatherCards = JSON.parse(mw);
+                let mos = localStorage.getItem(STORAGE.morningOtherStatusCards); if(mos) morningOtherStatusCards = JSON.parse(mos);
+                let mq = localStorage.getItem(STORAGE.morningQuoteCards); if(mq) morningQuoteCards = JSON.parse(mq);
+                if(!profile.myAvatar) profile.myAvatar = defaultMyAvatar;
+                if(!profile.otherAvatar) profile.otherAvatar = defaultOtherAvatar;
+                if(!callBg) callBg = defaultCallBg;
+            } catch(e) { console.warn(e); }
+        }
+
+        function addSysMsg(content, isCallRecord = false) {
+            messages.push({ id: genId(), sender: 'system', type: isCallRecord ? 'call' : 'text', content: cleanText(content), timestamp: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+            renderChat(); saveAll();
+        }
+
+        // 对方消息生成（纯随机）
+        function genOtherMessage(suggestedQuoteId = null) {
+            if(dailyCards.length === 0) return null;
+            const card = dailyCards[Math.floor(Math.random() * dailyCards.length)];
+            let content = card.content;
+            if(card.type === 'text') {
+                content = cleanText(content);
+                if(Math.random() < 0.3) content += ' ' + EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+            }
+            let quote = null;
+            if(Math.random() < 0.3) {
+                let targetId = suggestedQuoteId;
+                if(!targetId) {
+                    const myMsgs = messages.filter(m => m.sender === 'me');
+                    if(myMsgs.length) targetId = myMsgs[Math.floor(Math.random() * myMsgs.length)].id;
+                }
+                const quoted = messages.find(m => m.id === targetId);
+                if(quoted) quote = { id: quoted.id, text: quoted.type === 'text' ? cleanText(quoted.content) : '[附件]', sender: quoted.sender };
+            }
+            return {
+                id: genId(), sender: 'other', type: card.type, content: content,
+                mediaUrl: card.type !== 'text' ? card.content : null,
+                timestamp: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+                readByMe: false, readByOther: true, quote: quote
+            };
+        }
+        
+        function replyBatch(forceQuoteId = null) {
+            const count = Math.random() < 0.35 ? rand(2,3) : 1;
+            let newMsgs = [];
+            for(let i=0;i<count;i++) { let m = genOtherMessage(forceQuoteId); if(m) newMsgs.push(m); }
+            if(newMsgs.length) { 
+                messages.push(...newMsgs); 
+                renderChat(); saveAll();
+                if (!pageVisible) {
+                    newMsgs.forEach(msg => {
+                        sendNotification(`${profile.otherName} 发来新消息`, msg.type === 'text' ? msg.content : '[图片/视频]');
+                    });
+                }
+            }
+        }
+
+        function sendMyMessage(text, type='text', mediaUrl=null, quoteInfo=null) {
+            if(type === 'text') text = cleanText(text);
+            if(!text && !mediaUrl) return;
+            const newMsg = {
+                id: genId(), sender: 'me', type: type, content: type === 'text' ? text : mediaUrl,
+                timestamp: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+                readByMe: true, readByOther: false,
+                quote: quoteInfo ? { id: quoteInfo.id, text: quoteInfo.text, sender: quoteInfo.sender } : null
+            };
+            messages.push(newMsg); renderChat(); saveAll();
+            const delay = rand(speed.minSec, speed.maxSec) * 1000;
+            const tid = setTimeout(() => {
+                const willReply = Math.random() < 0.7;
+                if(willReply) {
+                    const idx = messages.findIndex(m => m.id === newMsg.id);
+                    if(idx !== -1) messages[idx].readByOther = true;
+                    replyBatch(newMsg.id);
+                } else {
+                    const becomesRead = Math.random() < 0.4;
+                    if(becomesRead) {
+                        const idx = messages.findIndex(m => m.id === newMsg.id);
+                        if(idx !== -1) messages[idx].readByOther = true;
+                        renderChat(); saveAll();
+                    }
+                }
+            }, delay);
+            pendingTimeouts.push(tid);
+            if(inputText) inputText.value = '';
+        }
+
+        function replyWithQuote(quotedMsg) {
+            const replyText = prompt(`回复 ${quotedMsg.sender === 'me' ? profile.myName : profile.otherName}：\n"${quotedMsg.type === 'text' ? quotedMsg.content : '[图片/视频]'}"\n\n输入你的回复：`);
+            if(replyText && replyText.trim()) {
+                sendMyMessage(replyText, 'text', null, {
+                    id: quotedMsg.id,
+                    text: quotedMsg.type === 'text' ? cleanText(quotedMsg.content) : '[附件]',
+                    sender: quotedMsg.sender
+                });
+            }
+        }
+
+        function sendMediaFile(file, type) { if(!file) return; const url = URL.createObjectURL(file); sendMyMessage('', type, url); }
+        function markOthersRead() { let changed=false; messages.forEach(msg=>{ if(msg.sender==='other'&&!msg.readByMe){ msg.readByMe=true; changed=true; } }); if(changed){ renderChat(); saveAll(); } }
+
+        function doPat() {
+            const custom = prompt(`输入拍一拍文案（将显示为“你 ${文案} ${profile.otherName}”）`, patTextMe);
+            if(custom !== null && custom.trim() !== '') { patTextMe = custom.trim(); saveAll(); }
+            addSysMsg(`你 ${patTextMe} ${profile.otherName}`, false);
+            setTimeout(() => { if(Math.random() < 0.5) addSysMsg(`${profile.otherName} ${patTextOther} 你`, false); }, 600);
+        }
+        function otherPat() { addSysMsg(`${profile.otherName} ${patTextOther} 你`, false); }
+        setInterval(() => { if(activeTab === 'chat' && !callActive && Math.random() < 0.1) otherPat(); }, 90000);
+
+        function applyMyStatus() { if(myStatusSelect){ const ns=myStatusSelect.value; if(ns!==myStatus){ myStatus=ns; addSysMsg(`我的状态更新为：${myStatus}`,false); renderTopBar(); saveAll(); } } }
+        function changeOtherStatusBackground() { if(otherStatusCards.length){ const s=otherStatusCards[Math.floor(Math.random()*otherStatusCards.length)].content; otherStatus=s; addSysMsg(`${profile.otherName} 的状态更新为：${s}`,false); renderTopBar(); saveAll(); } }
+        function forceOtherSpeak() { replyBatch(); }
+
+        function sendLetter(content) {
+            content = cleanText(content); if(!content.trim()) return;
+            const now = Date.now();
+            const newLetter = { id: genId(), myContent: content, otherReply: null, myTime: now, replied: false };
+            letters.unshift(newLetter); saveAll(); renderLettersTab();
+            const minDelay = 12 * 60 * 60 * 1000, maxDelay = 48 * 60 * 60 * 1000;
+            const delay = rand(minDelay/1000, maxDelay/1000) * 1000;
+            setTimeout(() => {
+                const idx = letters.findIndex(l => l.id === newLetter.id);
+                if(idx !== -1 && !letters[idx].replied) {
+                    const replyCards = [...dailyCards].sort(()=>0.5-Math.random()).slice(0, rand(1,3));
+                    let text = replyCards.map(c=>c.type==='text'?cleanText(c.content):'[图片/视频]').join(' ');
+                    letters[idx].otherReply = text; letters[idx].replied = true;
+                    saveAll(); renderLettersTab(); addSysMsg(`📨 收到${profile.otherName}的回信`, false);
+                }
+            }, delay);
+        }
+        function maybeAutoLetter() {
+            const now = Date.now(), last = lastAutoLetterTime || 0, minGap = 24 * 60 * 60 * 1000;
+            if(now - last >= minGap) {
+                lastAutoLetterTime = now; saveAll();
+                const replyCards = [...dailyCards].sort(()=>0.5-Math.random()).slice(0, rand(1,3));
+                let text = replyCards.map(c=>c.type==='text'?cleanText(c.content):'[图片/视频]').join(' ');
+                const autoLetter = { id: genId(), myContent: null, otherReply: text, myTime: now, isAuto: true };
+                letters.unshift(autoLetter);
+                saveAll(); renderLettersTab(); addSysMsg(`📬 ${profile.otherName} 给你写了一封信`, false);
+                if (!pageVisible) sendNotification(`${profile.otherName} 给你写了一封信`, text);
+            }
+        }
+        setInterval(() => { maybeAutoLetter(); }, 60 * 60 * 1000);
+
+        function startOutgoingCall() {
+            if(callActive) return;
+            callActive = true; callDirection = 'outgoing'; miniCall = false;
+            renderCallOverlay();
+            if(callTimeout) clearTimeout(callTimeout);
+            callTimeout = setTimeout(() => {
+                if(callDirection === 'outgoing') {
+                    const answered = Math.random() < 0.55;
+                    if(answered) {
+                        callDirection = 'active'; callTimer = 0;
+                        if(callInterval) clearInterval(callInterval);
+                        callInterval = setInterval(() => { callTimer++; renderCallOverlay(); }, 1000);
+                        addSysMsg(`📞 视频通话开始`, true);
+                        renderCallOverlay();
+                    } else { endCall(); addSysMsg(`📞 对方未接听`, true); }
+                }
+            }, 2000);
+        }
+        function acceptIncoming() { if(incomingCall) { incomingCall=false; callActive=true; callDirection='active'; callTimer=0; if(callInterval) clearInterval(callInterval); callInterval=setInterval(()=>{ callTimer++; renderCallOverlay(); },1000); addSysMsg(`📞 视频通话开始`,true); renderCallOverlay(); } }
+        function rejectIncoming() { incomingCall=false; addSysMsg(`📞 已拒绝通话`,true); renderCallOverlay(); }
+        function endCall() {
+            if(callActive && callDirection === 'active') addSysMsg(`📞 通话结束 ${Math.floor(callTimer/60)}:${(callTimer%60)<10?'0'+callTimer%60:callTimer%60}`, true);
+            else if(callDirection === 'outgoing') addSysMsg(`📞 通话未接通`, true);
+            if(callInterval) clearInterval(callInterval);
+            callActive=false; callDirection=null; callTimer=0; miniCall=false; if(callTimeout) clearTimeout(callTimeout);
+            renderCallOverlay(); renderChat();
+        }
+        function toggleMini() { if(callActive) { miniCall = !miniCall; renderCallOverlay(); } }
+        function scheduleRandomCall() {
+            setInterval(() => { if(!callActive && !incomingCall && activeTab === 'chat' && Math.random() < 0.25) { incomingCall=true; renderCallOverlay(); let autoReject=setTimeout(()=>{ if(incomingCall){ incomingCall=false; addSysMsg(`📞 对方来电超时未接`,true); renderCallOverlay(); } },60000); window.__incRej=autoReject; } }, 50000);
+        }
+
+        function startAutoActive() { if(autoActiveTimer) clearTimeout(autoActiveTimer); const next = rand(speed.autoMinSec, speed.autoMaxSec) * 1000; autoActiveTimer = setTimeout(() => { if(activeTab === 'chat' && !callActive) forceOtherSpeak(); startAutoActive(); }, next); }
+        function startOtherStatusTimer() { if(autoOtherStatusTimer) clearInterval(autoOtherStatusTimer); autoOtherStatusTimer = setInterval(() => { if(otherStatusCards.length) changeOtherStatusBackground(); }, rand(55000, 110000)); }
+
+        function generateDailyGreeting() {
+            const now = new Date(); const hour = now.getHours();
+            let greeting = hour<12?"早安":(hour<18?"下午好":"晚上好");
+            const dateStr = `${now.getFullYear()}. ${(now.getMonth()+1)} 月 / ${now.getDate()} 日`;
+            const randomStatus = morningStatusCards.length ? morningStatusCards[Math.floor(Math.random() * morningStatusCards.length)] : "想你";
+            const randomWeather = morningWeatherCards.length ? morningWeatherCards[Math.floor(Math.random() * morningWeatherCards.length)] : "阳光明媚";
+            const randomOtherStatus = morningOtherStatusCards.length ? morningOtherStatusCards[Math.floor(Math.random() * morningOtherStatusCards.length)] : "在线";
+            const randomQuote = morningQuoteCards.length ? morningQuoteCards[Math.floor(Math.random() * morningQuoteCards.length)] : "你是我最喜欢的人 ❤️";
+            return { greeting, date: dateStr, otherName: profile.otherName, status: randomStatus, weather: randomWeather, otherStatus: randomOtherStatus, quote: randomQuote };
+        }
+        function showDailyGreetingIfNeeded(callback) {
+            const today = new Date().toDateString();
+            const lastDate = localStorage.getItem(STORAGE.lastGreetingDate);
+            if(lastDate === today) { if(callback) callback(); return; }
+            const content = generateDailyGreeting();
+            const mask = document.createElement('div'); mask.className = 'daily-mask';
+            mask.innerHTML = `
+                <div class="daily-card">
+                    <h2>${content.greeting}</h2>
+                    <div class="date">${content.date}</div>
+                    <div class="daily-status">
+                        <p><span class="emoji-big">🍊</span> ${profile.otherName} 今日状态：${content.status}</p>
+                        <p><span class="emoji-big">☀️</span> ${profile.otherName} 的天气：${content.weather}</p>
+                        <p><span class="emoji-big">🌟</span> ${profile.otherName} 的状态：${content.otherStatus}</p>
+                        <p style="margin-top:12px;">✨ ${content.quote} ✨</p>
+                    </div>
+                    <button class="confirm-btn">✔ 知道了，开始今天</button>
+                </div>
+            `;
+            document.body.appendChild(mask);
+            const btn = mask.querySelector('.confirm-btn');
+            btn.onclick = () => {
+                dailyMemories.unshift({ date: content.date, timestamp: Date.now(), content: { status: content.status, weather: content.weather, otherStatus: content.otherStatus, quote: content.quote } });
+                if(dailyMemories.length > 30) dailyMemories.pop();
+                saveAll();
+                localStorage.setItem(STORAGE.lastGreetingDate, today);
+                mask.remove();
+                if(callback) callback();
+            };
+        }
+
+        function readFileAsDataURL(file, callback) {
+            const reader = new FileReader();
+            reader.onload = (e) => callback(e.target.result);
+            reader.readAsDataURL(file);
+        }
+
+        function isDuplicateText(existingArray, newText, isObjectArray = false, contentKey = 'content') {
+            const trimmed = newText.trim();
+            return existingArray.some(item => {
+                const existing = isObjectArray ? item[contentKey] : item;
+                return existing && existing.trim() === trimmed;
+            });
+        }
+        function addTextCardWithDedup() {
+            let t = prompt('文本内容');
+            if(t && t.trim()) {
+                const trimmed = t.trim();
+                if(isDuplicateText(dailyCards, trimmed, true, 'content')) { alert('该字卡已存在'); return; }
+                dailyCards.push({ id: genId(), type: 'text', content: trimmed });
+                saveAll(); renderCardsTab();
+            }
+        }
+        function addImageCardFromAlbum() {
+            const input = document.createElement('input');
+            input.type = 'file'; input.accept = 'image/*';
+            input.onchange = (e) => { if(e.target.files.length) { readFileAsDataURL(e.target.files[0], (dataUrl) => { dailyCards.push({ id: genId(), type: 'image', content: dataUrl }); saveAll(); renderCardsTab(); }); } };
+            input.click();
+        }
+        function addVideoCardFromAlbum() {
+            const input = document.createElement('input');
+            input.type = 'file'; input.accept = 'video/*';
+            input.onchange = (e) => { if(e.target.files.length) { readFileAsDataURL(e.target.files[0], (dataUrl) => { dailyCards.push({ id: genId(), type: 'video', content: dataUrl }); saveAll(); renderCardsTab(); }); } };
+            input.click();
+        }
+        function addStatusCardWithDedup(array, setter, title) {
+            let s = prompt(`添加${title}`);
+            if(s && s.trim()) {
+                const trimmed = s.trim();
+                if(isDuplicateText(array, trimmed, true, 'content')) { alert('该状态已存在'); return; }
+                array.push({ id: genId(), content: trimmed });
+                setter([...array]);
+                saveAll(); renderCardsTab();
+                if(myStatusSelect && setter === (()=>myStatusCards)) updateStatusSelect();
+            }
+        }
+        function addMorningCardWithDedup(array, setter, promptMsg) {
+            let s = prompt(promptMsg);
+            if(s && s.trim()) {
+                const trimmed = s.trim();
+                if(isDuplicateText(array, trimmed, false)) { alert('该内容已存在'); return; }
+                array.push(trimmed);
+                setter([...array]);
+                saveAll(); renderCardsTab();
+            }
+        }
+        function deleteLetter(letterId) { if(confirm('确定删除这封信吗？')) { letters = letters.filter(l => l.id !== letterId); saveAll(); renderLettersTab(); } }
+        function deleteMemory(index) { if(confirm('确定删除这条回忆吗？')) { dailyMemories.splice(index,1); saveAll(); renderMemoriesTab(); } }
+
+        function renderTopBar() {
+            const topDiv = document.querySelector('.top-bar');
+            if(topDiv) {
+                topDiv.innerHTML = `<div class="top-info"><img src="${profile.otherAvatar}" class="avatar"><div><strong>${profile.otherName}</strong><span>${otherStatus}</span></div></div><div style="display:flex; gap:16px;"><i class="fas fa-video" style="font-size:20px; cursor:pointer;" onclick="window.startOutgoingCall()"></i><i class="fas fa-phone" style="font-size:20px;"></i></div>`;
+            }
+        }
+        function renderChat() {
+            if(!chatScrollDiv) return;
+            chatScrollDiv.style.background = chatBg ? `url(${chatBg})` : '#ededed';
+            let html = '';
+            messages.forEach(msg => {
+                if(msg.sender === 'system' || msg.type === 'call') {
+                    html += `<div style="display:flex; justify-content:center; margin:8px 0;"><div class="call-record">${msg.content}</div></div>`;
+                    return;
+                }
+                const isMe = msg.sender === 'me';
+                const avatar = isMe ? profile.myAvatar : profile.otherAvatar;
+                let displayContent = msg.type === 'text' ? cleanText(msg.content) : msg.content;
+                let longPressAttr = '';
+                if(!isMe) longPressAttr = ` ontouchstart="window.touchStartMsg('${msg.id}', event)" ontouchend="window.touchEndMsg(event)" ontouchcancel="window.touchCancelMsg()"`;
+                html += `<div class="message-row ${isMe ? 'me' : 'other'}" data-msg-id="${msg.id}"${longPressAttr}>
+                            ${!isMe ? `<img src="${avatar}" class="avatar">` : ''}
+                            <div style="max-width:75%;">
+                                ${msg.quote ? `<div class="quote"><span style="font-weight:500;">${msg.quote.sender === 'me' ? profile.myName : profile.otherName}:</span> ${cleanText(msg.quote.text)}</div>` : ''}
+                                <div class="bubble ${isMe ? 'me' : 'other'}">
+                                    ${msg.type === 'text' ? displayContent : (msg.type === 'image' ? `<img src="${msg.content}" class="media-preview">` : `<video src="${msg.content}" controls style="max-width:180px; border-radius:12px;"></video>`)}
+                                </div>
+                                <div class="msg-footer"><span>${msg.timestamp}</span>${isMe ? `<span>${msg.readByOther ? '已读' : '未读'}</span>` : `<span>${msg.readByMe ? '已读' : '未读'}</span>`}</div>
+                            </div>
+                            ${isMe ? `<img src="${avatar}" class="avatar">` : ''}
+                        </div>`;
+            });
+            chatScrollDiv.innerHTML = html;
+            chatScrollDiv.scrollTop = chatScrollDiv.scrollHeight;
+        }
+        let longPressTimer = null;
+        window.touchStartMsg = (msgId, event) => { longPressTimer = setTimeout(() => { const quotedMsg = messages.find(m => m.id === msgId); if(quotedMsg && quotedMsg.sender === 'other') replyWithQuote(quotedMsg); longPressTimer = null; }, 500); event.preventDefault(); };
+        window.touchEndMsg = () => { if(longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } };
+        window.touchCancelMsg = () => { if(longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } };
+
+        function renderCardsTab() {
+            const div = document.getElementById('tabContent');
+            div.innerHTML = `<div style="padding:12px; overflow-y:auto; height:100%;">
+                <div class="card-section"><div class="card-title">📇 日常聊天字卡</div><div style="display:flex; gap:6px; margin-bottom:12px;"><button id="addTextBtn" class="btn-primary">+文本</button><button id="addImageBtn" class="btn-primary">📷 图片</button><button id="addVideoBtn" class="btn-primary">🎥 视频</button></div><div id="dailyList"></div></div>
+                <div class="card-section"><div class="card-title">😊 我方状态字卡</div><button id="addMyStatusBtn" class="btn-primary">+状态</button><div id="myStatusList"></div></div>
+                <div class="card-section"><div class="card-title">🎭 对方状态字卡</div><button id="addOtherStatusBtn" class="btn-primary">+状态</button><div id="otherStatusList"></div></div>
+                <div class="card-section"><div class="card-title">🌞 早安·对方今日状态</div><button id="addMorningStatusBtn" class="btn-primary">+状态</button><div id="morningStatusList"></div></div>
+                <div class="card-section"><div class="card-title">🌤️ 早安·对方的天气</div><button id="addMorningWeatherBtn" class="btn-primary">+天气</button><div id="morningWeatherList"></div></div>
+                <div class="card-section"><div class="card-title">💫 早安·对方的状态</div><button id="addMorningOtherStatusBtn" class="btn-primary">+状态</button><div id="morningOtherStatusList"></div></div>
+                <div class="card-section"><div class="card-title">❤️ 早安·情话语录</div><button id="addMorningQuoteBtn" class="btn-primary">+语录</button><div id="morningQuoteList"></div></div>
+                <div class="card-section"><div class="card-title">⚙️ 速度设置</div><div>最短回复: <input type="number" id="minSec" value="${speed.minSec}" style="width:60px;"> 最长回复: <input type="number" id="maxSec" value="${speed.maxSec}" style="width:60px;"></div><div>主动发消息间隔: 最小 <input type="number" id="autoMin" value="${speed.autoMinSec}" style="width:60px;"> 最大 <input type="number" id="autoMax" value="${speed.autoMaxSec}" style="width:60px;"></div><button id="saveSpeedBtn" class="btn-primary">保存</button></div>
+            </div>`;
+            function refresh() {
+                document.getElementById('dailyList').innerHTML = dailyCards.map(c => `<div style="background:#f5f5f5; padding:6px; margin:6px 0; border-radius:12px; display:flex; justify-content:space-between;"><span>${c.type==='text'?cleanText(c.content):(c.type==='image'?'📷图片':'🎬视频')}</span><button onclick="window.delDaily('${c.id}')" style="color:red;">❌</button></div>`).join('');
+                document.getElementById('myStatusList').innerHTML = myStatusCards.map(s => `<div style="background:#f5f5f5; margin:6px 0; padding:6px; border-radius:12px; display:flex; justify-content:space-between;">${s.content}<button onclick="window.delMyStatus('${s.id}')" style="color:red;">❌</button></div>`).join('');
+                document.getElementById('otherStatusList').innerHTML = otherStatusCards.map(s => `<div style="background:#f5f5f5; margin:6px 0; padding:6px; border-radius:12px; display:flex; justify-content:space-between;">${s.content}<button onclick="window.delOtherStatus('${s.id}')" style="color:red;">❌</button></div>`).join('');
+                document.getElementById('morningStatusList').innerHTML = morningStatusCards.map((s,idx) => `<div style="background:#f5f5f5; margin:6px 0; padding:6px; border-radius:12px; display:flex; justify-content:space-between;">${s}<button onclick="window.delMorningStatus(${idx})" style="color:red;">❌</button></div>`).join('');
+                document.getElementById('morningWeatherList').innerHTML = morningWeatherCards.map((s,idx) => `<div style="background:#f5f5f5; margin:6px 0; padding:6px; border-radius:12px; display:flex; justify-content:space-between;">${s}<button onclick="window.delMorningWeather(${idx})" style="color:red;">❌</button></div>`).join('');
+                document.getElementById('morningOtherStatusList').innerHTML = morningOtherStatusCards.map((s,idx) => `<div style="background:#f5f5f5; margin:6px 0; padding:6px; border-radius:12px; display:flex; justify-content:space-between;">${s}<button onclick="window.delMorningOtherStatus(${idx})" style="color:red;">❌</button></div>`).join('');
+                document.getElementById('morningQuoteList').innerHTML = morningQuoteCards.map((s,idx) => `<div style="background:#f5f5f5; margin:6px 0; padding:6px; border-radius:12px; display:flex; justify-content:space-between;">${s}<button onclick="window.delMorningQuote(${idx})" style="color:red;">❌</button></div>`).join('');
+            }
+            window.delDaily = (id) => { dailyCards = dailyCards.filter(c=>c.id!==id); saveAll(); refresh(); };
+            window.delMyStatus = (id) => { myStatusCards = myStatusCards.filter(s=>s.id!==id); saveAll(); refresh(); if(myStatusSelect) updateStatusSelect(); };
+            window.delOtherStatus = (id) => { otherStatusCards = otherStatusCards.filter(s=>s.id!==id); saveAll(); refresh(); };
+            window.delMorningStatus = (idx) => { morningStatusCards.splice(idx,1); saveAll(); refresh(); };
+            window.delMorningWeather = (idx) => { morningWeatherCards.splice(idx,1); saveAll(); refresh(); };
+            window.delMorningOtherStatus = (idx) => { morningOtherStatusCards.splice(idx,1); saveAll(); refresh(); };
+            window.delMorningQuote = (idx) => { morningQuoteCards.splice(idx,1); saveAll(); refresh(); };
+            document.getElementById('addTextBtn').onclick = () => addTextCardWithDedup();
+            document.getElementById('addImageBtn').onclick = () => addImageCardFromAlbum();
+            document.getElementById('addVideoBtn').onclick = () => addVideoCardFromAlbum();
+            document.getElementById('addMyStatusBtn').onclick = () => addStatusCardWithDedup(myStatusCards, (newArr) => { myStatusCards = newArr; }, '我方状态');
+            document.getElementById('addOtherStatusBtn').onclick = () => addStatusCardWithDedup(otherStatusCards, (newArr) => { otherStatusCards = newArr; }, '对方状态');
+            document.getElementById('addMorningStatusBtn').onclick = () => addMorningCardWithDedup(morningStatusCards, (newArr) => { morningStatusCards = newArr; }, '对方今日状态');
+            document.getElementById('addMorningWeatherBtn').onclick = () => addMorningCardWithDedup(morningWeatherCards, (newArr) => { morningWeatherCards = newArr; }, '天气描述');
+            document.getElementById('addMorningOtherStatusBtn').onclick = () => addMorningCardWithDedup(morningOtherStatusCards, (newArr) => { morningOtherStatusCards = newArr; }, '对方状态');
+            document.getElementById('addMorningQuoteBtn').onclick = () => addMorningCardWithDedup(morningQuoteCards, (newArr) => { morningQuoteCards = newArr; }, '情话语录');
+            document.getElementById('saveSpeedBtn').onclick = () => {
+                speed.minSec = parseInt(document.getElementById('minSec').value)||3; speed.maxSec = parseInt(document.getElementById('maxSec').value)||12;
+                speed.autoMinSec = parseInt(document.getElementById('autoMin').value)||90; speed.autoMaxSec = parseInt(document.getElementById('autoMax').value)||210;
+                if(speed.minSec > speed.maxSec) speed.maxSec = speed.minSec+1; if(speed.autoMinSec > speed.autoMaxSec) speed.autoMaxSec = speed.autoMinSec+30;
+                saveAll(); startAutoActive(); alert('速度已更新');
+            };
+            refresh();
+        }
+        function updateStatusSelect() { if(myStatusSelect){ const cur=myStatusSelect.value; myStatusSelect.innerHTML=myStatusCards.map(s=>`<option value="${s.content}" ${s.content===cur?'selected':''}>${s.content}</option>`).join(''); if(!myStatusCards.length) myStatusSelect.innerHTML='<option>无状态</option>'; } }
+        function renderLettersTab() {
+            const div = document.getElementById('tabContent');
+            div.innerHTML = `<div style="padding:12px; display:flex; flex-direction:column; height:100%;"><div style="display:flex; gap:8px; margin-bottom:12px;"><input id="letterInput" placeholder="写一封信..." style="flex:1;"><button id="sendLetterBtn" class="btn-primary">寄出</button></div><div id="lettersList" style="flex:1; overflow-y:auto;"></div></div>`;
+            function refresh() {
+                const listDiv = document.getElementById('lettersList');
+                listDiv.innerHTML = letters.map(l => {
+                    const deleteBtn = `<button class="delete-btn" onclick="window.deleteLetter('${l.id}')">删除</button>`;
+                    if(l.isAuto) {
+                        return `<div style="background:white;border-radius:16px;padding:12px;margin-bottom:12px;">${deleteBtn}<div style="font-size:11px;color:#8e8e93;">${new Date(l.myTime).toLocaleString()}</div><div><strong>${profile.otherName}的来信：</strong>${l.otherReply}</div></div>`;
+                    } else {
+                        return `<div style="background:white;border-radius:16px;padding:12px;margin-bottom:12px;">${deleteBtn}<div style="font-size:11px;color:#8e8e93;">${new Date(l.myTime).toLocaleString()}</div><div><strong>我：</strong>${l.myContent}</div><div><strong>${profile.otherName}的回信：</strong>${l.otherReply||'✍️ 对方写信中（至少12小时后）...'}</div></div>`;
+                    }
+                }).join('');
+            }
+            document.getElementById('sendLetterBtn').onclick = () => { const inp=document.getElementById('letterInput'); if(inp.value.trim()) sendLetter(inp.value); inp.value=''; };
+            refresh();
+            window.deleteLetter = deleteLetter;
+        }
+        function renderMemoriesTab() {
+            const div = document.getElementById('tabContent');
+            div.innerHTML = `<div style="padding:12px; overflow-y:auto; height:100%;"><div class="card-section"><div class="card-title">📔 每日回忆录</div><div id="memoriesList"></div></div></div>`;
+            function refresh() {
+                const container = document.getElementById('memoriesList');
+                if(!container) return;
+                if(dailyMemories.length===0) container.innerHTML='<div style="text-align:center;color:#aaa;padding:20px;">暂无回忆，每日登录后会生成</div>';
+                else container.innerHTML = dailyMemories.map((m, idx) => `<div style="background:#fff5f8;border-radius:16px;padding:12px;margin-bottom:12px;"><button class="delete-btn" onclick="window.deleteMemory(${idx})">删除</button><div style="font-size:12px;color:#c97a9a;">📅 ${m.date}</div><div style="margin-top:6px;"><strong>💗 状态：</strong>${m.content.status}</div><div><strong>🌤️ 天气：</strong>${m.content.weather}</div><div><strong>🌟 状态：</strong>${m.content.otherStatus}</div><div><strong>✨ 寄语：</strong>${m.content.quote}</div></div>`).join('');
+            }
+            refresh();
+            window.deleteMemory = deleteMemory;
+        }
+        function renderSettingsTab() {
+            const div = document.getElementById('tabContent');
+            const myAvatarPreview = profile.myAvatar && !profile.myAvatar.startsWith('blob:') ? `<img src="${profile.myAvatar}" class="preview-img">` : (profile.myAvatar ? `<img src="${profile.myAvatar}" class="preview-img">` : '');
+            const otherAvatarPreview = profile.otherAvatar && !profile.otherAvatar.startsWith('blob:') ? `<img src="${profile.otherAvatar}" class="preview-img">` : (profile.otherAvatar ? `<img src="${profile.otherAvatar}" class="preview-img">` : '');
+            const chatBgPreview = chatBg ? `<div class="preview-bg" style="background-image: url(${chatBg});"></div>` : '<div class="preview-bg" style="background:#ccc;">未设置</div>';
+            const callBgPreview = callBg ? `<div class="preview-bg" style="background-image: url(${callBg});"></div>` : '<div class="preview-bg" style="background:#ccc;">未设置</div>';
+            div.innerHTML = `
+                <div style="padding:12px; overflow-y:auto;">
+                    <div class="card-section"><div class="card-title">👤 个人设置</div><div>我的昵称: <input id="myName" value="${profile.myName}" style="width:100%;"></div><div style="margin-top:8px;">对方昵称: <input id="otherName" value="${profile.otherName}" style="width:100%;"></div><div style="margin-top:8px;">我的头像: <button id="uploadMyAvatarBtn" class="img-upload-label">📷 从相册选择</button><input type="file" id="myAvatarInput" accept="image/*" style="display:none"><div id="myAvatarPreview">${myAvatarPreview}</div></div><div style="margin-top:8px;">对方头像: <button id="uploadOtherAvatarBtn" class="img-upload-label">📷 从相册选择</button><input type="file" id="otherAvatarInput" accept="image/*" style="display:none"><div id="otherAvatarPreview">${otherAvatarPreview}</div></div><div style="margin-top:8px;">聊天背景: <button id="uploadBgBtn" class="img-upload-label">🖼️ 选择图片</button><input type="file" id="bgInput" accept="image/*" style="display:none"><div id="bgPreview">${chatBgPreview}</div></div><div style="margin-top:8px;">通话背景: <button id="uploadCallBgBtn" class="img-upload-label">🖼️ 选择图片</button><input type="file" id="callBgInput" accept="image/*" style="display:none"><div id="callBgPreview">${callBgPreview}</div></div><button id="saveSettingsBtn" class="btn-primary" style="margin-top:12px;">保存昵称</button></div>
+                    <div class="card-section"><div class="card-title">✋ 拍一拍自定义</div><div>我拍对方的文案: <input id="patMeInput" value="${patTextMe}" style="width:100%;"></div><div>对方拍我的文案: <input id="patOtherInput" value="${patTextOther}" style="width:100%;"></div><button id="savePatBtn" class="btn-primary">保存</button></div>
+                    <div class="card-section"><div class="card-title">🔔 通知设置</div><button id="enableNotifyBtn" class="btn-primary">开启通知权限</button><button id="testNotifyBtn" class="btn-primary" style="margin-left:8px;">测试通知</button><div style="font-size:12px; color:#8e8e93; margin-top:6px;">💡 若曾拒绝，请到浏览器设置中手动允许后重试</div><div class="card-title" style="margin-top:8px;">🗑️ 数据管理</div><button id="clearChatBtn" class="btn-primary" style="background:#ff3b30;">清空聊天记录</button></div>
+                </div>
+            `;
+            document.getElementById('enableNotifyBtn').onclick = () => requestNotification();
+            document.getElementById('testNotifyBtn').onclick = () => testNotification();
+            const myAvatarInput = document.getElementById('myAvatarInput'), otherAvatarInput = document.getElementById('otherAvatarInput'), bgInput = document.getElementById('bgInput'), callBgInput = document.getElementById('callBgInput');
+            document.getElementById('uploadMyAvatarBtn').onclick = () => myAvatarInput.click();
+            document.getElementById('uploadOtherAvatarBtn').onclick = () => otherAvatarInput.click();
+            document.getElementById('uploadBgBtn').onclick = () => bgInput.click();
+            document.getElementById('uploadCallBgBtn').onclick = () => callBgInput.click();
+            myAvatarInput.onchange = (e) => { if(e.target.files.length) { readFileAsDataURL(e.target.files[0], (dataUrl) => { profile.myAvatar = dataUrl; document.getElementById('myAvatarPreview').innerHTML = `<img src="${dataUrl}" class="preview-img">`; saveAll(); renderTopBar(); renderChat(); }); } };
+            otherAvatarInput.onchange = (e) => { if(e.target.files.length) { readFileAsDataURL(e.target.files[0], (dataUrl) => { profile.otherAvatar = dataUrl; document.getElementById('otherAvatarPreview').innerHTML = `<img src="${dataUrl}" class="preview-img">`; saveAll(); renderTopBar(); renderChat(); }); } };
+            bgInput.onchange = (e) => { if(e.target.files.length) { readFileAsDataURL(e.target.files[0], (dataUrl) => { chatBg = dataUrl; document.getElementById('bgPreview').innerHTML = `<div class="preview-bg" style="background-image: url(${dataUrl});"></div>`; saveAll(); renderChat(); }); } };
+            callBgInput.onchange = (e) => { if(e.target.files.length) { readFileAsDataURL(e.target.files[0], (dataUrl) => { callBg = dataUrl; document.getElementById('callBgPreview').innerHTML = `<div class="preview-bg" style="background-image: url(${dataUrl});"></div>`; saveAll(); }); } };
+            document.getElementById('saveSettingsBtn').onclick = () => { profile.myName = document.getElementById('myName').value; profile.otherName = document.getElementById('otherName').value; saveAll(); renderTopBar(); renderChat(); alert('昵称已保存'); };
+            document.getElementById('savePatBtn').onclick = () => { patTextMe = document.getElementById('patMeInput').value.trim() || patTextMe; patTextOther = document.getElementById('patOtherInput').value.trim() || patTextOther; saveAll(); alert('拍一拍文案已保存'); };
+            document.getElementById('clearChatBtn').onclick = () => { if(confirm('清空聊天记录？')){ messages=[]; saveAll(); renderChat(); addSysMsg('聊天记录已清空',false); } };
+        }
+        function renderCallOverlay() {
+            let overlay = document.getElementById('callOverlay');
+            if(!overlay){ overlay=document.createElement('div'); overlay.id='callOverlay'; document.body.appendChild(overlay); }
+            if(callActive && !miniCall) {
+                overlay.style.display='flex'; overlay.className='video-overlay';
+                overlay.style.backgroundImage = callBg ? `url(${callBg})` : 'rgba(0,0,0,0.9)';
+                overlay.style.backgroundSize = 'cover';
+                overlay.innerHTML = `<div style="background:rgba(0,0,0,0.6);padding:20px;border-radius:20px;text-align:center;color:white;">${callDirection==='outgoing'?'<p>📞 呼叫中...</p>':`<p>📱 通话中 ${Math.floor(callTimer/60)}:${(callTimer%60)<10?'0'+callTimer%60:callTimer%60}</p>`}<div style="display:flex;gap:20px;margin-top:20px;"><button onclick="window.endCall()" style="background:red;padding:8px20px;border-radius:40px;">挂断</button><button onclick="window.toggleMini()" style="background:gray;padding:8px20px;border-radius:40px;">最小化</button></div></div>`;
+            } else if(callActive && miniCall) {
+                overlay.style.display='block'; overlay.className='video-mini';
+                overlay.style.backgroundImage = `url(${callBg})`;
+                overlay.style.backgroundSize = 'cover';
+                overlay.innerHTML = `📞 通话中 ${Math.floor(callTimer/60)}:${(callTimer%60)<10?'0'+callTimer%60:callTimer%60}<br>点击恢复`;
+                overlay.onclick = () => toggleMini();
+            } else if(incomingCall) {
+                overlay.style.display='flex'; overlay.className='video-overlay';
+                overlay.style.background = 'rgba(0,0,0,0.8)';
+                overlay.innerHTML = `<div style="background:white;border-radius:20px;padding:20px;text-align:center;"><p>${profile.otherName} 邀请视频通话</p><div style="display:flex;gap:20px;margin-top:20px;"><button onclick="window.acceptIncoming()" style="background:green;padding:6px20px;border-radius:40px;">接听</button><button onclick="window.rejectIncoming()" style="background:red;padding:6px20px;border-radius:40px;">拒绝</button></div></div>`;
+            } else overlay.style.display='none';
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+            if(tab==='chat') document.querySelector('.tab[data-tab="chat"]')?.classList.add('active');
+            if(tab==='cards') document.querySelector('.tab[data-tab="cards"]')?.classList.add('active');
+            if(tab==='letters') document.querySelector('.tab[data-tab="letters"]')?.classList.add('active');
+            if(tab==='memories') document.querySelector('.tab[data-tab="memories"]')?.classList.add('active');
+            if(tab==='settings') document.querySelector('.tab[data-tab="settings"]')?.classList.add('active');
+            const contentDiv = document.getElementById('tabContent');
+            if(tab === 'chat') {
+                contentDiv.innerHTML = `
+                    <div class="chat-scroll" id="chatScroll"></div>
+                    <div class="input-container">
+                        <div class="input-main">
+                            <input id="msgInput" placeholder="输入消息...">
+                            <button id="sendMsgBtn">发送</button>
+                        </div>
+                        <div class="toolbar">
+                            <div class="emoji-list">${EMOJIS.map(e=>`<span style="cursor:pointer;" onclick="window.appendEmoji('${e}')">${e}</span>`).join('')}</div>
+                            <div class="media-icons">
+                                <label for="imageUpload" style="cursor:pointer;">📷</label>
+                                <input type="file" id="imageUpload" accept="image/*" style="display:none">
+                                <label for="videoUpload" style="cursor:pointer;">🎥</label>
+                                <input type="file" id="videoUpload" accept="video/*" style="display:none">
+                                <button id="forceSpeakBtn" style="background:transparent; color:#576b95; padding:0;">让他说话</button>
+                            </div>
+                            <div class="status-control">
+                                <select id="myStatusSelect"></select>
+                                <button id="applyStatusBtn">应用</button>
+                                <button id="patBtn" class="pat-btn">拍一拍</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatScrollDiv = document.getElementById('chatScroll'); inputText = document.getElementById('msgInput');
+                renderChat(); chatScrollDiv?.addEventListener('click',()=>markOthersRead());
+                myStatusSelect = document.getElementById('myStatusSelect'); updateStatusSelect();
+                document.getElementById('applyStatusBtn').onclick = ()=>applyMyStatus();
+                document.getElementById('sendMsgBtn').onclick = ()=>{ if(inputText.value.trim()) sendMyMessage(inputText.value,'text'); };
+                document.getElementById('forceSpeakBtn').onclick = ()=>forceOtherSpeak();
+                document.getElementById('patBtn').onclick = ()=>doPat();
+                const imgInput = document.getElementById('imageUpload'); imgInput.onchange = e=>{ if(e.target.files.length) sendMediaFile(e.target.files[0],'image'); imgInput.value=''; };
+                const videoInput = document.getElementById('videoUpload'); videoInput.onchange = e=>{ if(e.target.files.length) sendMediaFile(e.target.files[0],'video'); videoInput.value=''; };
+                window.appendEmoji = (e)=>{ if(inputText) inputText.value += e; };
+            } else if(tab === 'cards') renderCardsTab();
+            else if(tab === 'letters') renderLettersTab();
+            else if(tab === 'memories') renderMemoriesTab();
+            else if(tab === 'settings') renderSettingsTab();
+        }
+
+        function init() {
+            load();
+            if(messages.length === 0) addSysMsg('✨ 欢迎使用蜜糖聊天室', false);
+            appEl = document.getElementById('app');
+            appEl.innerHTML = `<div class="phone"><div class="top-bar"></div><div class="tab-bar"><div class="tab active" data-tab="chat">聊天</div><div class="tab" data-tab="cards">字卡库</div><div class="tab" data-tab="letters">书信</div><div class="tab" data-tab="memories">回忆录</div><div class="tab" data-tab="settings">设置</div></div><div id="tabContent" style="flex:1;display:flex;flex-direction:column;overflow:hidden;"></div></div>`;
+            document.querySelectorAll('.tab').forEach(tab=>{ tab.addEventListener('click',()=>switchTab(tab.getAttribute('data-tab'))); });
+            renderTopBar();
+            switchTab('chat');
+            startOtherStatusTimer(); startAutoActive(); scheduleRandomCall();
+            maybeAutoLetter();
+            showDailyGreetingIfNeeded(()=>{ renderChat(); });
+            window.startOutgoingCall = startOutgoingCall; window.endCall = endCall; window.toggleMini = toggleMini;
+            window.acceptIncoming = acceptIncoming; window.rejectIncoming = rejectIncoming;
+            window.sendMyMessage = sendMyMessage; window.doPat = doPat; window.forceOtherSpeak = forceOtherSpeak;
+        }
+
+        function showPasswordLock() {
+            appEl = document.getElementById('app');
+            appEl.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#fff;"><div style="text-align:center;background:white;padding:30px;border-radius:24px;box-shadow:0 2px 10px rgba(0,0,0,0.1);"><i class="fab fa-weixin" style="font-size:48px;color:#07c160;"></i><h2 style="margin:16px 0;">输入私人密码</h2><input type="password" id="pwdInput" style="border:1px solid #ccc;border-radius:20px;padding:8px;width:200px;"><div><button id="unlockBtn" style="margin-top:20px;background:#07c160;padding:8px30px;border-radius:20px;color:white;border:none;">解锁</button></div></div></div>`;
+            document.getElementById('unlockBtn').onclick = () => { if(document.getElementById('pwdInput').value === '20250122') init(); else alert('密码错误'); };
+        }
+        showPasswordLock();
+    })();
+</script>
+</body>
+</html>
